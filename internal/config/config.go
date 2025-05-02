@@ -1,27 +1,41 @@
 package config
 
-import "os"
+import (
+	"github.com/joho/godotenv"
+	"os"
+)
 
 type Config struct {
-	Port      string
-	DBURL     string
-	JWTSecret string
-	RedisAddr string
+	ServerPort   string
+	PostgresAddr string
+	JWTSecret    string
+	RedisAddr    string
+	LogLevel     string // "debug" | "info" | "warn" | "error"
+	GinMode      string // "debug" | "release" | "test"
 }
 
 func LoadConfig() *Config {
-	return &Config{
-		Port:      getEnv("APP_PORT", "8080"),
-		DBURL:     getEnv("DATABASE_URL", "postgres://user:pass@localhost:5432/urlshortener?sslmode=disable"),
-		JWTSecret: getEnv("JWT_SECRET", "supersecretkey"),
-		RedisAddr: getEnv("REDIS_ADDR", "localhost:6379"),
-	}
-}
+	// Load .env if present. Ignore error when file doesn’t exist.
+	_ = godotenv.Load()
 
-func getEnv(key, fallback string) string {
-	val := os.Getenv(key)
-	if val == "" {
+	// helper that falls back to default
+	getEnv := func(key, fallback string) string {
+		if val, ok := os.LookupEnv(key); ok {
+			return val
+		}
 		return fallback
 	}
-	return val
+	cfg := &Config{
+		ServerPort:   getEnv("SERVER_PORT", "8080"),
+		GinMode:      getEnv("GIN_MODE", "debug"),
+		LogLevel:     getEnv("LOG_LEVEL", "info"),
+		PostgresAddr: getEnv("POSTGRES_ADDR", "postgres://localhost:5432/mydb?sslmode=disable"),
+		RedisAddr:    getEnv("REDIS_ADDR", "localhost:6379"),
+		JWTSecret:    os.Getenv("JWT_SECRET"),
+	}
+
+	if cfg.JWTSecret == "" {
+		panic("config error: JWT_SECRET is required but missing")
+	}
+	return cfg
 }
