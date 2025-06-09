@@ -20,7 +20,6 @@ func RequestLogger(log *logrus.Logger) gin.HandlerFunc {
 		c.Set("req_id", reqID)
 
 		c.Next()
-
 		latency := time.Since(start)
 
 		log.WithFields(logrus.Fields{
