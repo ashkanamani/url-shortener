@@ -1,7 +1,7 @@
 package core
 
 import (
-	"github.com/ashkanamani/url-shortener/internal/config"
+	"github.com/ashkanamani/url-shortener/pkg/config"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"

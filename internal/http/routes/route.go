@@ -15,7 +15,7 @@ func SetupRouter(app *core.App) {
 		c.JSON(http.StatusOK, gin.H{"message": "pong"})
 	})
 	app.Router.POST("/shorten", newShortenURLHandler(app))
-	app.Router.GET("/:redirect", newRedirectionHandler(app))
+	app.Router.GET("/:redirect", newRedirectorHandler(app))
 }
 
 func newShortenURLHandler(app *core.App) gin.HandlerFunc {
@@ -41,7 +41,7 @@ func newShortenURLHandler(app *core.App) gin.HandlerFunc {
 	}
 }
 
-func newRedirectionHandler(app *core.App) gin.HandlerFunc {
+func newRedirectorHandler(app *core.App) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		code := c.Param("redirect")
 		app.Logger.Println("Path to", code)

@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/ashkanamani/url-shortener/internal/config"
 	"github.com/ashkanamani/url-shortener/internal/core"
 	"github.com/ashkanamani/url-shortener/internal/db/postgres"
 	"github.com/ashkanamani/url-shortener/internal/http/middleware"
 	"github.com/ashkanamani/url-shortener/internal/http/routes"
+	"github.com/ashkanamani/url-shortener/pkg/config"
 	"github.com/ashkanamani/url-shortener/pkg/logger"
 	"github.com/gin-gonic/gin"
 )
